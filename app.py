@@ -33,7 +33,18 @@ def login():
             return json.dumps({'status': 'Both fields required'})
         return render_template('login.html', form=form)
     user = helpers.get_user()
-    return render_template('home.html', user=user)
+    fxpairs = ["EURUSD",'GPBUSD','USDJPY','USDCHF']
+    timeframes = ['M5','M15','M30','H1','H4','D1']
+
+
+
+    fxpairselected = fxpairs[0]
+    timeframeselected = timeframes[0]
+
+    #CHECK SUBSCRIPTION
+    date="01-12-2019"
+    return render_template('home.html', user=user, fxpairs=fxpairs, fxpairselected=fxpairselected,
+                           timeframes=timeframes, timeframeselected=timeframeselected, date=date)
 
 
 @app.route("/logout")
@@ -78,8 +89,43 @@ def settings():
         return render_template('settings.html', user=user)
     return redirect(url_for('login'))
 
+# -------- Prediction ---------------------------------------------------------- #
+@app.route('/predict', methods=['POST'])
+def predict():
+    if session.get('logged_in'):
+        if request.method == 'POST':
+            fxpair = request.form['fxpair']
+            tf = request.form['tf']
+
+            # HERE"S THE SNIPPET OF PREDICTION
+
+            response = "UP"
+            return response
+
+    return redirect(url_for('login'))
+
+# -------- Prediction ---------------------------------------------------------- #
+@app.route('/subscription', methods=['POST'])
+def subscription():
+    if session.get('logged_in'):
+        if request.method == 'POST':
+
+            #HERE"S THE SNIPPET OF CHECKING THE SUBSCRIPTION DATE
+
+            response = "02-12-2019"
+            return response
+
+    return redirect(url_for('login'))
+
 
 # ======== Main ============================================================== #
-#if __name__ == "__main__":
-    #app.config['SERVER_NAME'] = 'neuro.onrender.com'
-#    app.run(debug=True, use_reloader=True)
+if __name__ == "__main__":
+
+    if os.environ['ENV'] != 'prod':
+        host = os.getenv ('IP', '127.0.0.1')
+        port = int (os.getenv ('PORT', 5000))
+        app.config['TEMPLATES_AUTO_RELOAD'] = True
+        app.config['RELOAD'] = True
+        app.config['DEBUG'] = True
+        #app.config['SERVER_NAME'] = 'neuro.onrender.com'
+        app.run(host=host, port=port)
