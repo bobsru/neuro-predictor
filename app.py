@@ -80,6 +80,6 @@ def settings():
 
 
 # ======== Main ============================================================== #
-if __name__ == "__main__":
+#if __name__ == "__main__":
     #app.config['SERVER_NAME'] = 'neuro.onrender.com'
-    app.run(debug=True, use_reloader=True)
+#    app.run(debug=True, use_reloader=True)
