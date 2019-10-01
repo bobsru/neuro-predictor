@@ -120,10 +120,12 @@ def subscription():
 
 # ======== Main ============================================================== #
 if __name__ == "__main__":
-    host = os.getenv ('IP', '127.0.0.10')
-    port = int (os.getenv ('PORT', 5000))
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.config['RELOAD'] = True
-    app.config['DEBUG'] = True
-    #app.config['SERVER_NAME'] = 'neuro.onrender.com'
-    app.run(host=host, port=port)
+
+    if os.environ['ENV'] != 'prod':
+        host = os.getenv ('IP', '127.0.0.1')
+        port = int (os.getenv ('PORT', 5000))
+        app.config['TEMPLATES_AUTO_RELOAD'] = True
+        app.config['RELOAD'] = True
+        app.config['DEBUG'] = True
+        #app.config['SERVER_NAME'] = 'neuro.onrender.com'
+        app.run(host=host, port=port)
