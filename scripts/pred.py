@@ -11,6 +11,7 @@ import sys
 import scipy.misc
 import subprocess
 import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import cv2
