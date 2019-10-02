@@ -3,7 +3,7 @@
 import sys
 import os
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.ext.declarative import declarative_base
 
 # Local
@@ -30,6 +30,7 @@ class User(Base):
     username = Column(String(30), unique=True)
     password = Column(String(512))
     email = Column(String(50))
+    expiry = Column(Date)
 
     def __repr__(self):
         return '<User %r>' % self.username
