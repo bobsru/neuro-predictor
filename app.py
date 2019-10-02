@@ -7,10 +7,43 @@ from flask import Flask, redirect, url_for, render_template, request, session
 import json
 import sys
 import os
+import stripe
+
+stripe_keys = {
+  'secret_key': os.environ['SECRET_KEY'],
+  'publishable_key': os.environ['PUBLISHABLE_KEY']
+}
+
+stripe.api_key = stripe_keys['secret_key']
+
+# stripe.Product.create(
+#   name='Neuro FX Predictor',
+#   type='service',
+# )
+#
+# stripe.Plan.create(
+#   nickname="Standard Monthly",
+#   product="1",
+#   amount=100,
+#   currency="usd",
+#   interval="month",
+#   usage_type="licensed",
+# )
+#
+# stripe.Subscription.create(
+#   customer="{{CUSTOMER_ID}}",
+#   items=[
+#     {
+#       "plan": "{{STANDARD_MONTHLY_USD_PLAN_ID}}",
+#       "quantity": 1,
+#     },
+#   ]
+# )
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
-
+fxpairs = ["EURUSD",'GPBUSD','USDJPY','USDCHF']
+timeframes = ['M5','M15','M30','H1','H4','D1']
 # Heroku
 #from flask_heroku import Heroku
 #heroku = Heroku(app)
@@ -33,18 +66,14 @@ def login():
             return json.dumps({'status': 'Both fields required'})
         return render_template('login.html', form=form)
     user = helpers.get_user()
-    fxpairs = ["EURUSD",'GPBUSD','USDJPY','USDCHF']
-    timeframes = ['M5','M15','M30','H1','H4','D1']
-
-
-
     fxpairselected = fxpairs[0]
     timeframeselected = timeframes[0]
 
     #CHECK SUBSCRIPTION
-    date="01-12-2019"
+    date="2019-09-30"
     return render_template('home.html', user=user, fxpairs=fxpairs, fxpairselected=fxpairselected,
-                           timeframes=timeframes, timeframeselected=timeframeselected, date=date)
+                           timeframes=timeframes, timeframeselected=timeframeselected, date=date,
+                           key=stripe_keys['publishable_key'])
 
 
 @app.route("/logout")
@@ -109,12 +138,29 @@ def predict():
 def subscription():
     if session.get('logged_in'):
         if request.method == 'POST':
+            amount = 100
 
-            #HERE"S THE SNIPPET OF CHECKING THE SUBSCRIPTION DATE
+            charged = stripe.Charge.create(
+                amount=amount,
+                currency='usd',
+                card=request.form['stripeToken'],
+                description='Subscription Renewal'
+            )
 
-            response = "02-12-2019"
-            return response
+            if charged != None and "id" in charged:
+                response = "2019-10-30"
+            else:
+                response = 'Failed Renewing'
 
+        user = helpers.get_user()
+        fxpairselected = fxpairs[0]
+        timeframeselected = timeframes[0]
+
+
+
+        return render_template('home.html', user=user, fxpairs=fxpairs, fxpairselected=fxpairselected,
+                           timeframes=timeframes, timeframeselected=timeframeselected, date=response,
+                           key=stripe_keys['publishable_key'])
     return redirect(url_for('login'))
 
 

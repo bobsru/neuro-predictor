@@ -17,7 +17,13 @@
               <span class="tag is-warning is-medium" id="date">{{ date }} </span>
                <br>
                 <br>
-                <a id="subscription-button" class="form-button button is-info is-inverted is-outlined">Buy/Renew</a>
+            <div id='subscription-hide' style="display:none;">
+            <form id="subscription-button" action="/subscription" method="POST">
+                <script id="subscription-button" src="https://button.stripe.com/v1/button.js" class="stripe-button is-info is-inverted is-outlined" data-label="Renew Subscription" data-key="{{ key }}"></script>
+            </form>
+                </div>
+                <!-- <a id="subscription-button" class="form-button button is-info is-inverted is-outlined" data-key="{{ key }}>Buy/Renew</a>
+                -->
             <br>
 
         </div>
@@ -73,6 +79,17 @@
 {% block scripts %}
 
 <script type="text/javascript">
+$(document).ready(function () {
+    user_sub_date = new Date("{{  date }}");
+    todays_date = new Date();
+    if(todays_date > user_sub_date){
+        $("#subscription-hide").show();
+        html_data = "{{ date  }}" + " (subscription expired)"
+        $('#date').html(html_data);
+    }
+        });
+
+
 $(document).on('click', '#predict-button', function(){
     var fxpairselected = $('#fxpairselected :selected').text();
     var timeframeselected = $('#timeframeselected :selected').text();
@@ -90,7 +107,11 @@ $(document).on('click', '#predict-button', function(){
     $('#feedback').show();
 });
 
+/*
+
 $(document).on('click', '#subscription-button', function(){
+    console.log('hey');
+
     req = $.ajax({
         url: "/subscription",
         type: "POST",
@@ -102,6 +123,8 @@ $(document).on('click', '#subscription-button', function(){
     });
 
 });
+
+ */
 </script>
 
 <script src="../static/js/scripts.js"></script>
