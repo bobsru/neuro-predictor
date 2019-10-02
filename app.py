@@ -16,34 +16,12 @@ stripe_keys = {
 
 stripe.api_key = stripe_keys['secret_key']
 
-# stripe.Product.create(
-#   name='Neuro FX Predictor',
-#   type='service',
-# )
-#
-# stripe.Plan.create(
-#   nickname="Standard Monthly",
-#   product="1",
-#   amount=100,
-#   currency="usd",
-#   interval="month",
-#   usage_type="licensed",
-# )
-#
-# stripe.Subscription.create(
-#   customer="{{CUSTOMER_ID}}",
-#   items=[
-#     {
-#       "plan": "{{STANDARD_MONTHLY_USD_PLAN_ID}}",
-#       "quantity": 1,
-#     },
-#   ]
-# )
-
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
 fxpairs = ["EURUSD",'GPBUSD','USDJPY','USDCHF']
 timeframes = ['M5','M15','M30','H1','H4','D1']
+
+
 # Heroku
 #from flask_heroku import Heroku
 #heroku = Heroku(app)
@@ -173,5 +151,4 @@ if __name__ == "__main__":
         app.config['TEMPLATES_AUTO_RELOAD'] = True
         app.config['RELOAD'] = True
         app.config['DEBUG'] = True
-        #app.config['SERVER_NAME'] = 'neuro.onrender.com'
         app.run(host=host, port=port)
