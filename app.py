@@ -164,7 +164,6 @@ def subscription():
 # ======== Main ============================================================== #
 if __name__ == "__main__":
 
-    os.environ['ENV'] = 'test'
 
     if os.environ['ENV'] != 'prod':
         host = os.getenv ('IP', '127.0.0.1')
@@ -173,3 +172,5 @@ if __name__ == "__main__":
         app.config['RELOAD'] = True
         app.config['DEBUG'] = True
         app.run(host=host, port=port)
+    else:
+        app.run(host="0.0.0.0", port=80)
