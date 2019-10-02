@@ -11,7 +11,7 @@ import stripe
 from scripts import pred
 from keras.models import load_model
 import datetime
-import private_keys
+#import private_keys
 
 stripe_keys = {
   'secret_key': os.environ['SECRET_KEY'],
