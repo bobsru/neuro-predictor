@@ -8,6 +8,10 @@ import json
 import sys
 import os
 import stripe
+from scripts import pred
+from keras.models import load_model
+import datetime
+import private_keys
 
 stripe_keys = {
   'secret_key': os.environ['SECRET_KEY'],
@@ -18,9 +22,13 @@ stripe.api_key = stripe_keys['secret_key']
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
-fxpairs = ["EURUSD",'GPBUSD','USDJPY','USDCHF']
-timeframes = ['M5','M15','M30','H1','H4','D1']
+fxpairs = ["EURUSD",'GBPUSD','USDJPY','USDCHF']
+#timeframes = ['M5','M15','M30','H1','H4','D1']
+timeframes = ['D1']
 
+model_name = './static/models/cnn_model_fx.h5'
+model = load_model (model_name)
+model._make_predict_function()
 
 # Heroku
 #from flask_heroku import Heroku
@@ -48,7 +56,10 @@ def login():
     timeframeselected = timeframes[0]
 
     #CHECK SUBSCRIPTION
-    date="2019-09-30"
+    if user.expiry:
+        date = user.expiry
+    else:
+        date="0001-01-01"
     return render_template('home.html', user=user, fxpairs=fxpairs, fxpairselected=fxpairselected,
                            timeframes=timeframes, timeframeselected=timeframeselected, date=date,
                            key=stripe_keys['publishable_key'])
@@ -100,14 +111,19 @@ def settings():
 @app.route('/predict', methods=['POST'])
 def predict():
     if session.get('logged_in'):
-        if request.method == 'POST':
-            fxpair = request.form['fxpair']
-            tf = request.form['tf']
-
-            # HERE"S THE SNIPPET OF PREDICTION
-
-            response = "UP"
-            return response
+        user = user = helpers.get_user()
+        if user.expiry:
+            if user.expiry >= datetime.datetime.now().date():
+                if request.method == 'POST':
+                    fxpair = request.form['fxpair']
+                    tf = request.form['tf']
+                    try:
+                        response = pred.make_prediction(fxpair, model)
+                    except:
+                        response = "Error"
+                    return response
+        else:
+            return "No Subs"
 
     return redirect(url_for('login'))
 
@@ -126,7 +142,10 @@ def subscription():
             )
 
             if charged != None and "id" in charged:
-                response = "2019-10-30"
+                response = datetime.datetime.now() + datetime.timedelta(days=20)
+                response = response.date()
+                #save to database
+                helpers.change_user(expiry=response)
             else:
                 response = 'Failed Renewing'
 
@@ -144,6 +163,8 @@ def subscription():
 
 # ======== Main ============================================================== #
 if __name__ == "__main__":
+
+    os.environ['ENV'] = 'test'
 
     if os.environ['ENV'] != 'prod':
         host = os.getenv ('IP', '127.0.0.1')

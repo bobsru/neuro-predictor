@@ -91,20 +91,23 @@ $(document).ready(function () {
 
 
 $(document).on('click', '#predict-button', function(){
+    $('#spinner').show();
+     $('#feedback').hide();
     var fxpairselected = $('#fxpairselected :selected').text();
     var timeframeselected = $('#timeframeselected :selected').text();
-    $('#spinner').show();
     req = $.ajax({
         url: "/predict",
         type: "POST",
+        async: false,
         data:{fxpair: fxpairselected, tf: timeframeselected}
     });
 
      req.done(function(data){
-        $('#feedback').html(data)
+        $('#feedback').html(data);
+        $('#spinner').hide();
+        $('#feedback').show();
     });
-    $('#spinner').hide();
-    $('#feedback').show();
+
 });
 
 /*
