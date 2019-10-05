@@ -118,12 +118,16 @@ def predict():
                     fxpair = request.form['fxpair']
                     tf = request.form['tf']
                     try:
-                        response = pred.make_prediction(fxpair, model)
+                        resp = pred.make_prediction(fxpair, model)
+                        if resp == "UP":
+                            response = '<span class="tag is-success is-medium" id="feedback">UP</span>'
+                        else:
+                            response = '<span class="tag is-danger is-medium" id="feedback">DOWN</span>'
                     except:
-                        response = "Error"
+                        response = '<span class="tag is-white is-medium" id="feedback">ERROR</span>'
                     return response
         else:
-            return "No Subs"
+            return '<span class="tag is-white is-medium" id="feedback">NO SUBS</span>'
 
     return redirect(url_for('login'))
 
@@ -142,7 +146,7 @@ def subscription():
             )
 
             if charged != None and "id" in charged:
-                response = datetime.datetime.now() + datetime.timedelta(days=20)
+                response = datetime.datetime.now() + datetime.timedelta(days=30)
                 response = response.date()
                 #save to database
                 helpers.change_user(expiry=response)
