@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block body %}
+<script src="https://unpkg.com/feather-icons"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
 <section class="hero is-white is-medium">
   <nav class="navbar is-transparent">
     <div class="navbar-brand">
@@ -109,15 +112,112 @@
     </div>  
   </div>
 </section>
+
+<!-- Features -->
+<div class="section" style="color: black; margin-top: 20px; border-bottom: 1px solid lightgrey;">
+    <div class="container">
+        <div class="item columns">
+            <div class="column is-3" style="border: 0px solid red;">
+                <p style="text-align: center; font-size: 35px;">
+                   <i data-feather="activity"></i>
+                </p>
+
+                <p class="item-title" style="text-align: center; margin-top: 10px;">
+                    <span style="font-weight: bold;">Live monitoring</span>
+                </p>
+
+                <p style="text-align: center; margin-top: 10px;">
+                    We monitor all currencies, so there is no need to wait for history download.
+                </p>
+
+            </div>
+
+            <div class="column is-3" style="border: 0px solid red;">
+                <p style="text-align: center; font-size: 35px;">
+                    </span><i data-feather="watch"></i>
+                </p>
+
+                <p class="item-title" style="text-align: center; margin-top: 10px;">
+                    <span style="font-weight: bold;">Latency</span>
+                </p>
+
+                <p style="text-align: center; margin-top: 10px;">
+                    Fast predictions can be integrated into live trading system.
+                </p>
+            </div>
+
+            <div class="column is-3" style="border: 0px solid red;">
+                <p style="text-align: center; font-size: 35px;">
+                    </span><i data-feather="database"></i>
+                </p>
+
+                <p class="item-title" style="text-align: center; margin-top: 10px;">
+                    <span style="font-weight: bold;">Stats</span>
+                </p>
+
+                <p style="text-align: center; margin-top: 10px;">
+                    Keep track of your signals and overall prefomance.
+                </p>
+            </div>
+
+
+            <div class="column is-3" style="border: 0px solid red;">
+                <p style="text-align: center; font-size: 35px;">
+                    </span><i data-feather="heart"></i>
+                </p>
+
+                <p class="item-title" style="text-align: center; margin-top: 10px;">
+                    <span style="font-weight: bold;">Ease of use</span>
+                </p>
+
+                <p style="text-align: center; margin-top: 10px;">
+                    Neuro FX Fileter is beautiful and easy to use.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Partners -->
+<div class="section" style="color: black; margin-top: -20px; border-bottom: 1px solid lightgrey;">
+    <div class="container">
+        <p style="text-align: center; font-size: 18px;">
+            OUR PARTNERS
+        </p>
+
+        <div class="item columns" style="margin-top: 20px;">
+
+            <div class="column is-6" style="border: 0px solid red; margin-top: 10px;">
+                <nav class="level">
+                    <div class="level-item">
+                        <img src="../static/images/partners/p4.png" width="70%">
+                    </div>
+                </nav>
+            </div>
+
+            <div class="column is-6" style="border: 0px solid red; margin-top: 20px;">
+                <nav class="level">
+                    <div class="level-item">
+                        <img src="../static/images/partners/p5.png" width="70%">
+                    </div>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
 <section class="hero">
   <footer class="footer">
     <div class="container">
       <div class="content has-text-centered">
         <p>
-          <strong>Flaskex</strong> by Anthony Federico
+          Build with <strong>Flaskex</strong>
           <span class="icon is-small">
             <i class="fa fa-copyright"></i>
-          </span>2017</a>
+          </span>2019</a>
         </p>
 
       </div>
@@ -127,4 +227,6 @@
 {% endblock %}
 {% block scripts %}
 <script src="../static/js/scripts.js"></script>
+<script>feather.replace()</script>
 {% endblock %}
+
